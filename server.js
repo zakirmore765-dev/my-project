@@ -59,8 +59,8 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'project.html'));
 });
 
-// Port Setting
-const PORT = process.env.PORT || 5000;
+// Port Setting (ለ Render እንዲስማማ የተስተካከለ)
+const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
