@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="am">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>የእቃ ማስታወቂያ እና መገበያያ ገጽ</title>
+    <style>
+        /* Base & Global Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header Styles (Inline Styles ጸድተዋል) */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #333;
+            margin-bottom: 20px;
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-sell {
+            background-color: #ff9800;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-sell:hover {
+            background-color: #e68a00;
+        }
+
+        /* Filter Section Styles */
+        .filter-section {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .filter-section input,
+        .filter-select {
+            padding: 10px 15px;
+            background-color: #1e1e1e;
+            border: 1px solid #444;
+            color: #fff;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        .filter-section input {
+            flex: 2;
+            min-width: 200px;
+        }
+
+        .filter-select {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        /* Grid & Cards Section */
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .item-card {
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            padding: 15px;
+            border: 1px solid #333;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #242424;
+            padding: 25px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Header Section -->
+        <header>
+            <div class="header-brand">
+                <h2>ገበያ</h2>
+            </div>
+            <button class="btn-sell" onclick="openPostModal()">+ ሸጥ (Sell)</button>
+        </header>
+
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <input type="text" id="searchInput" placeholder="ምን መግዛት ይፈልጋሉ..." onkeyup="filterItems()">
+            
+            <select id="categoryFilter" aria-label="ምድብ ይምረጡ" class="filter-select" onchange="filterItems()">
+                <option value="all">ሁሉንም ምድቦች</option>
+                <option value="shoes">ጫማዎች</option>
+                <option value="clothes">ልብሶች</option>
+                <option value="electronics">ኤሌክትሮኒክስ</option>
+            </select>
+            
+            <select id="locationFilter" aria-label="ቦታ ይምረጡ" class="filter-select" onchange="filterItems()">
+                <option value="all">ሁሉንም ቦታዎች</option>
+                <option value="Addis Ababa">አዲስ አበባ</option>
+                <option value="Adama">አዳማ</option>
+            </select>
+        </div>
+
+        <!-- Items Grid Container -->
+        <main class="items-grid" id="itemsContainer">
+            <!-- እቃዎች በ JavaScript እዚህ ውስጥ ይጫናሉ -->
+        </main>
+    </div>
+
+    <!-- Post Modal Window -->
+    <div id="postModal" class="modal">
+        <div class="modal-content">
+            <h3>አዲስ እቃ ማስታወቂያ ያውጡ</h3>
+            <form id="postForm">
+                <!-- የ ፎርም መሙያዎች እዚህ ይገባሉ -->
+            </form>
+        </div>
+    </div>
+
+    <script src="server.js"></script>
+</body>
+</html>
