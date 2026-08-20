@@ -51,7 +51,16 @@ app.post('/api/verify-payment', (req, res) => {
         return res.json({ success: false, message: "ይህ የ Transaction ቁጥር አልተገኘም። እባክዎን በትክክል ከፈለዉ ያረጋግጡ!" });
     }
 });
+app.use(express.static(__dirname));
 
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'project.html'));
+});
+
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
 const PORT = 5000;
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
