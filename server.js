@@ -1,28 +1,30 @@
 const express = require('express');
-const cors = require('cors');
-const bodyParser = require('body-parser');
-
+const path = require('path');
 const app = express();
-app.use(cors());
-app.use(bodyParser.json());
 
-// ከቴሌብር የገቡ SMSዎች ማከማቻ
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Telebirr Transactions Store
 let telebirrTransactions = [];
 
-// 1. ስልክህ ላይ ያለው SMS Forwarder መተግበሪያ SMS ሲልክ እዚህ ይገባል
-app.post('/api/telebirr-webhook', (req, res) => {
+// Static ፋይሎችን ለማንበብ (HTML, CSS, JS)
+app.use(express.static(__dirname));
+
+// 1. Webhook Endpoint for Telebirr SMS
+app.post('/webhook', (req, res) => {
     const { message, sender } = req.body;
 
-    if (sender && sender.includes("telebirr")) {
-        const txMatch = message.match(/transaction id[:\s]+([A-Z0-9]+)/i);
-        const amountMatch = message.match(/ETB\s*([\d\.]+)/i);
+    if (sender && sender.includes("127")) {
+        const txIdMatch = message.match(/txid[:\s]*([a-z0-9]+)/i);
+        const amountMatch = message.match(/etb[:\s]*([\d\.]+)/i);
 
-        if (txMatch) {
-            const txId = txMatch[1];
-            const amount = amountMatch ? parseFloat(amountMatch[1]) : 0;
+        if (txIdMatch && amountMatch) {
+            const txId = txIdMatch[1];
+            const amount = parseFloat(amountMatch[1]);
 
             telebirrTransactions.push({
-                txId: txId,
+                txId: txId.toLowerCase(),
                 amount: amount,
                 date: new Date()
             });
@@ -35,7 +37,7 @@ app.post('/api/telebirr-webhook', (req, res) => {
     res.status(400).json({ status: "failed", message: "Invalid Telebirr SMS" });
 });
 
-// 2. ዌብሳይቱ ተጠቃሚው ያስገባውን Tx No. ለማረጋገጥ የሚጠይቀው API
+// 2. Verify Payment API
 app.post('/api/verify-payment', (req, res) => {
     const { txNumber } = req.body;
 
@@ -48,20 +50,17 @@ app.post('/api/verify-payment', (req, res) => {
             return res.json({ success: false, message: "የተከፈለው ገንዘብ ከ 5 ብር ያነሰ ነው!" });
         }
     } else {
-        return res.json({ success: false, message: "ይህ የ Transaction ቁጥር አልተገኘም። እባክዎን በትክክል ከፈለዉ ያረጋግጡ!" });
+        return res.json({ success: false, message: "ይህ የ Transaction ቁጥር አልተገኘም። እባክዎን በትክክል ከፍለው ያረጋግጡ!" });
     }
 });
-app.use(express.static(__dirname));
 
+// 3. Home Route (Main Page)
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'project.html'));
 });
 
+// Port Setting
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
-});
-const PORT = 5000;
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
 });
